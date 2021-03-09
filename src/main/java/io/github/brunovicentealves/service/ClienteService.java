@@ -16,15 +16,10 @@ public class ClienteService {
     }
 
     public void salvarCliente(Cliente cliente){
-            validarCliente(cliente);
 
             ClienteRepository clienteRespository = new ClienteRepository();
-            clienteRespository.persistir(cliente);
+            clienteRespository.salvar(cliente);
     }
 
-    public void validarCliente(Cliente cliente){
 
-        // aplica validações
-
-    }
 }
