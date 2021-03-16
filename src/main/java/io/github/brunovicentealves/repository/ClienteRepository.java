@@ -1,62 +1,23 @@
 package io.github.brunovicentealves.repository;
-
 import io.github.brunovicentealves.model.domain.entity.Cliente;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class ClienteRepository {
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private EntityManager entityManager;
-
-    @Transactional
-    public Cliente salvar(Cliente cliente) {
-
-        entityManager.persist(cliente);
-
-        return cliente;
-    }
-
-    @Transactional
-    public List<Cliente> obterTodos() {
-        return entityManager.createQuery("from Cliente",Cliente.class).getResultList();
-    }
+public interface ClienteRepository extends JpaRepository<Cliente,Integer> {
 
 
+    List<io.github.brunovicentealves.model.domain.entity.Cliente> findByNomeLike(String nome);
 
-    @Transactional
-    public List<Cliente> buscarPorNome(String nome ){
-        String jpql = "SELECT c FROM Cliente c WHERE c.nome like :nome ";
-        TypedQuery<Cliente> query =entityManager.createQuery(jpql,Cliente.class);
-        query.setParameter("nome","%" + nome +"%");
-        return  query.getResultList();
-    }
+    boolean existsByNome(String nome);
 
-    @Transactional
-    public Cliente atualizar(Cliente cliente) {
-        entityManager.merge(cliente);
-        return cliente;
-    }
 
-    @Transactional
-    public void deletar (Cliente cliente){
-        if(! entityManager.contains(cliente)){
-            cliente = entityManager.merge(cliente);
-        }
-       entityManager.remove(cliente);
+    @Query("select c from Cliente c left join fetch c.pedidos  where c.id = :id")
+    ClienteRepository findClienteFetchPedidos(@Param("id") Integer id);
 
-    }
+
 }
