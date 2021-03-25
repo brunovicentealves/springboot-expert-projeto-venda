@@ -31,29 +31,8 @@ public class VendasApplication {
 
 
             System.out.println("SALVANDO CLIENTES");
-          clienteRepository.save(new Cliente("Douglas"));
-            clienteRepository.save(new Cliente("pedro"));
-
-
-            Cliente fulano = new Cliente("fulano");
-
-            Pedido pedido = new Pedido();
-            pedido.setCliente(fulano);
-            pedido.setDataPedido(LocalDate.now());
-            pedido.setTotal(BigDecimal.valueOf(100));
-            pedidoRespository.save(pedido);
-            /*
-            Cliente cliente = (Cliente) clienteRepository.findClienteFetchPedidos(fulano.getId());
-            System.out.println(cliente);
-            System.out.println(cliente.getPedidos());
-
-             */
-
-            pedidoRespository.findByCliente(fulano).forEach(System.out::println);
-
-
-
-
+          clienteRepository.save(new Cliente(null,"Douglas","69696969696"));
+            clienteRepository.save(new Cliente(null,"pedro","69696969696"));
 
         };
     }

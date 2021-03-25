@@ -1,5 +1,7 @@
 package io.github.brunovicentealves.model.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -12,10 +14,14 @@ public class Cliente {
     @Column(name = "id")
     private Integer id ;
 
-    @Column(name = "nome")
+    @Column(name = "nome", length = 100)
     private String  nome;
 
-    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
+    @Column(name = "cpf",length = 11)
+    private String cpf;
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "cliente")
     private Set<Pedido> pedidos;
 
     public Cliente() {
@@ -25,9 +31,10 @@ public class Cliente {
         this.nome = nome;
     }
 
-    public Cliente(Integer id, String nome) {
+    public Cliente(Integer id, String nome , String cpf) {
         this.id = id;
         this.nome = nome;
+        this.cpf = cpf;
     }
 
     public Integer getId() {
@@ -46,6 +53,13 @@ public class Cliente {
         this.nome = nome;
     }
 
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        cpf = cpf;
+    }
 
     public Set<Pedido> getPedidos() {
         return pedidos;
