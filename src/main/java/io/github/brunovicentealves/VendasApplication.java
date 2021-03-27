@@ -1,7 +1,7 @@
 package io.github.brunovicentealves;
 
 import io.github.brunovicentealves.model.domain.entity.Cliente;
-import io.github.brunovicentealves.model.domain.entity.Produto;
+import io.github.brunovicentealves.model.domain.entity.Pedido;
 import io.github.brunovicentealves.repository.ClienteRepository;
 import io.github.brunovicentealves.repository.PedidoRespository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +11,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
 
 @SpringBootApplication
-
+@RestController
 public class VendasApplication {
 
 
@@ -28,8 +31,8 @@ public class VendasApplication {
 
 
             System.out.println("SALVANDO CLIENTES");
-          clienteRepository.save(new Cliente(null,"pedro","69696969696",null));
-            clienteRepository.save(new Cliente(null,"pedro","69696969696",null));
+          clienteRepository.save(new Cliente(null,"Douglas","69696969696"));
+            clienteRepository.save(new Cliente(null,"pedro","69696969696"));
 
         };
     }
