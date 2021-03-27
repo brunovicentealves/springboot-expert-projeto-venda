@@ -31,8 +31,8 @@ public class VendasApplication {
 
 
             System.out.println("SALVANDO CLIENTES");
-          clienteRepository.save(new Cliente(null,"Douglas","69696969696"));
-            clienteRepository.save(new Cliente(null,"pedro","69696969696"));
+          clienteRepository.save(new Cliente(null,"Douglas","69696969696",null));
+            clienteRepository.save(new Cliente(null,"pedro","69696969696",null));
 
         };
     }
