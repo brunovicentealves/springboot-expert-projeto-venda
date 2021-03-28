@@ -1,5 +1,6 @@
 package io.github.brunovicentealves.model.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class Produto {
     @Column(name = "preco_unitario")
     private BigDecimal preco;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "produto")
     private List<ItemPedido> itens ;
 
