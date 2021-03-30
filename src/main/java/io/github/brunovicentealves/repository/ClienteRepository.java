@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ClienteRepository extends JpaRepository<Cliente,Integer> {
+public interface ClienteRepository extends JpaRepository<Cliente,Long> {
 
 
     List<io.github.brunovicentealves.model.domain.entity.Cliente> findByNomeLike(String nome);
@@ -17,7 +17,7 @@ public interface ClienteRepository extends JpaRepository<Cliente,Integer> {
 
 
     @Query("select c from Cliente c left join fetch c.pedidos  where c.id = :id")
-    ClienteRepository findClienteFetchPedidos(@Param("id") Integer id);
+    ClienteRepository findClienteFetchPedidos(@Param("id") Long id);
 
 
 }

@@ -17,7 +17,7 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private Integer id ;
+    private Long id ;
 
     @Column(name = "nome", length = 100)
     private String  nome;
@@ -29,6 +29,10 @@ public class Cliente {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "cliente")
     private Set<Pedido> pedidos;
 
+    public Cliente(String nome, String cpf) {
+        this.nome = nome;
+        this.cpf = cpf;
+    }
 }
 
 

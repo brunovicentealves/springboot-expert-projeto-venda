@@ -2,9 +2,10 @@ package io.github.brunovicentealves.service.impl;
 
 import io.github.brunovicentealves.exception.RegraNegocioException;
 import io.github.brunovicentealves.model.domain.entity.Cliente;
+import io.github.brunovicentealves.model.domain.entity.Produto;
 import io.github.brunovicentealves.model.domain.entity.ItemPedido;
 import io.github.brunovicentealves.model.domain.entity.Pedido;
-import io.github.brunovicentealves.model.domain.entity.Produto;
+import io.github.brunovicentealves.model.domain.entity.enums.StatusPedido;
 import io.github.brunovicentealves.repository.ClienteRepository;
 import io.github.brunovicentealves.repository.ItemPedidoRepository;
 import io.github.brunovicentealves.repository.PedidoRespository;
@@ -15,10 +16,11 @@ import io.github.brunovicentealves.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-
 
 @Service
 public class PedidoServiceImpl  implements PedidoService {
@@ -37,8 +39,9 @@ public class PedidoServiceImpl  implements PedidoService {
     }
 
     @Override
+    @Transactional
     public Pedido salvar(PedidoDTO dto) {
-        Integer idCliente = dto.getCliente();
+        Long idCliente = dto.getCliente();
         Cliente cliente = clientesRepository
                 .findById(idCliente)
                 .orElseThrow(() -> new RegraNegocioException("Código de cliente inválido."));
@@ -47,6 +50,7 @@ public class PedidoServiceImpl  implements PedidoService {
         pedido.setTotal(dto.getTotal());
         pedido.setDataPedido(LocalDate.now());
         pedido.setCliente(cliente);
+        pedido.setStatus(StatusPedido.REALIZADO);
 
         List<ItemPedido> itemsPedido = converterItems(pedido, dto.getItems());
         pedidoRespository.save(pedido);
@@ -54,11 +58,17 @@ public class PedidoServiceImpl  implements PedidoService {
         pedido.setItens(itemsPedido);
         return pedido;
     }
+
+    @Override
+    public Optional<Pedido> obterPedidoCompleto(Integer id) {
+        return pedidoRespository.findByIdFetchItens(id);
+    }
+
+
     private List<ItemPedido> converterItems(Pedido pedido,List<ItemPedidoDTO> items){
         if(items.isEmpty()){
             throw new RegraNegocioException("Não é possível realizar um pedido sem items.");
         }
-
         return items
                 .stream()
                 .map( dto -> {
@@ -78,6 +88,5 @@ public class PedidoServiceImpl  implements PedidoService {
                 }).collect(Collectors.toList());
 
     }
-
-
 }
+

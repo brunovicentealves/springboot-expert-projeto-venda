@@ -28,7 +28,7 @@ public class ClienteController {
 
     @GetMapping("/{id}")
     @ResponseBody
-  public ResponseEntity<Cliente> getClienteById(@PathVariable("id")  Integer id){
+  public ResponseEntity<Cliente> getClienteById(@PathVariable("id")  Long id){
                    Optional<Cliente> cliente =clienteRepository.findById(id);
                    if(cliente.isPresent()){
                        return ResponseEntity.ok(cliente.get());
@@ -39,13 +39,13 @@ public class ClienteController {
     @PostMapping
     @ResponseBody
     public  ResponseEntity save (@RequestBody Cliente cliente){
-        clienteRepository.save(cliente);
-        return ResponseEntity.ok(cliente);
+        Cliente cliente1 = clienteRepository.save(cliente);
+        return ResponseEntity.ok(cliente1);
     }
 
     @DeleteMapping("/{id}")
     @ResponseBody
-    public ResponseEntity delete(@PathVariable Integer id ){
+    public ResponseEntity delete(@PathVariable Long id ){
         Optional<Cliente> cliente =clienteRepository.findById(id);
         if(cliente.isPresent()){
            clienteRepository.delete(cliente.get());
@@ -58,7 +58,7 @@ public class ClienteController {
     //Atualizando todo cliente
     @PutMapping("/{id}")
     @ResponseBody
-    public ResponseEntity update(@PathVariable Integer id , @RequestBody  Cliente cliente ){
+    public ResponseEntity update(@PathVariable Long id , @RequestBody  Cliente cliente ){
     return clienteRepository.findById(id)
             .map( clienteExistente -> {
                 cliente.setId(clienteExistente.getId());
