@@ -16,7 +16,7 @@ public class ClienteService {
 
     public Cliente salvar(Cliente cliente){
 
-        return clienteRepository.save(cliente);
+        return  clienteRepository.save(cliente);
     }
 
 
