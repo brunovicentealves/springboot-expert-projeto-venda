@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 public class InformacaoItemPedidoDTO {
 
     private String descricaoPedido;
-    private BigDecimal precoUnitario;
+    private Double precoUnitario;
     private Integer quantidade ;
 
 }

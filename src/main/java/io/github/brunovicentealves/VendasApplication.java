@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class VendasApplication {
 
 
-
     @Bean
     public CommandLineRunner init (
             @Autowired ClienteRepository clienteRepository ,
@@ -29,8 +28,8 @@ public class VendasApplication {
 
 
             System.out.println("SALVANDO CLIENTES");
-          clienteRepository.save(new Cliente(null,"Douglas","69696969696",null));
-            clienteRepository.save(new Cliente(null,"pedro","69696969696",null));
+          clienteRepository.save(new Cliente(null,"Douglas","17303432361",null));
+            clienteRepository.save(new Cliente(null,"pedro","07741487566",null));
 
         };
     }

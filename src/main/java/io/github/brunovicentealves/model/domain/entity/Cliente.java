@@ -2,8 +2,10 @@ package io.github.brunovicentealves.model.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 @Getter
 @Setter
@@ -19,9 +21,12 @@ public class Cliente {
     @Column(name = "id")
     private Long id ;
 
+    @NotEmpty(message = "{campo.nome.obrigatorio}")
     @Column(name = "nome", length = 100)
     private String  nome;
 
+    @NotEmpty(message = "{campo.cpf.obrigatorio}")
+    @CPF(message = "{campo.cpf.invalido}")
     @Column(name = "cpf",length = 11)
     private String cpf;
 

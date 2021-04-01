@@ -4,6 +4,8 @@ import io.github.brunovicentealves.model.domain.entity.ItemPedido;
 import io.github.brunovicentealves.model.domain.entity.Pedido;
 
 
+import io.github.brunovicentealves.model.domain.entity.enums.StatusPedido;
+import io.github.brunovicentealves.rest.dto.AtualizarStatusPedidoDTO;
 import io.github.brunovicentealves.rest.dto.InformacaoItemPedidoDTO;
 import io.github.brunovicentealves.rest.dto.InformacoePedidoDTO;
 import io.github.brunovicentealves.rest.dto.PedidoDTO;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 
+import javax.validation.Valid;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.stream.Collectors;
@@ -32,18 +35,27 @@ public class PedidoController {
     public PedidoController(PedidoServiceImpl pedidoService) {
         this.pedidoService = pedidoService;
     }
+
     @PostMapping
     @ResponseStatus(CREATED)
-    public Integer save( @RequestBody PedidoDTO dto ){
+    public Integer save( @RequestBody @Valid PedidoDTO dto ){
         Pedido pedido = pedidoService.salvar(dto);
         return pedido.getId();
     }
 
+    @GetMapping("{id}")
     public InformacoePedidoDTO getById(@PathVariable Integer id ){
         return pedidoService.obterPedidoCompleto(id)
                 .map(p-> converter(p))
                 .orElseThrow( () -> new ResponseStatusException(NOT_FOUND,"Pedido não Encontrado "));
         
+    }
+
+
+    @PatchMapping("{id}")
+    @ResponseStatus(NO_CONTENT)
+    public void UpdateStatusPedido(@PathVariable Integer id , @RequestBody AtualizarStatusPedidoDTO atualizarStatus){
+        pedidoService.AtualizarStatusPedido(id, atualizarStatus.getNovoStatus());
     }
 
     private InformacoePedidoDTO converter(Pedido pedido) {
