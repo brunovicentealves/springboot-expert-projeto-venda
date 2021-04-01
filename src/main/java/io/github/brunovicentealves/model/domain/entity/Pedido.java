@@ -1,13 +1,9 @@
 package io.github.brunovicentealves.model.domain.entity;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.brunovicentealves.model.domain.entity.enums.StatusPedido;
 import lombok.*;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 @Getter
 @Setter
@@ -31,8 +27,10 @@ public class Pedido {
     private LocalDate dataPedido;
 
     @Column(name = "total" , precision = 20 ,scale = 2)
-    private BigDecimal total;
+    private Double total;
 
+    // essa anotation  @Enumerated faz com que quando campo enum salvar no banco,
+    // acabe salvando como string
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private StatusPedido status;

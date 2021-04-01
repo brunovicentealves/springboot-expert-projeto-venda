@@ -9,11 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.ws.Response;
+
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/api/clientes")
 public class ClienteController {
 
@@ -27,7 +28,6 @@ public class ClienteController {
 
 
     @GetMapping("/{id}")
-    @ResponseBody
   public ResponseEntity<Cliente> getClienteById(@PathVariable("id")  Long id){
                    Optional<Cliente> cliente =clienteRepository.findById(id);
                    if(cliente.isPresent()){
@@ -37,14 +37,12 @@ public class ClienteController {
     }
 
     @PostMapping
-    @ResponseBody
-    public  ResponseEntity save (@RequestBody Cliente cliente){
+    public  ResponseEntity save (@RequestBody  @Valid  Cliente cliente){
         Cliente cliente1 = clienteRepository.save(cliente);
         return ResponseEntity.ok(cliente1);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseBody
     public ResponseEntity delete(@PathVariable Long id ){
         Optional<Cliente> cliente =clienteRepository.findById(id);
         if(cliente.isPresent()){
@@ -57,8 +55,7 @@ public class ClienteController {
 
     //Atualizando todo cliente
     @PutMapping("/{id}")
-    @ResponseBody
-    public ResponseEntity update(@PathVariable Long id , @RequestBody  Cliente cliente ){
+    public ResponseEntity update(@PathVariable Long id , @RequestBody @Valid Cliente cliente ){
     return clienteRepository.findById(id)
             .map( clienteExistente -> {
                 cliente.setId(clienteExistente.getId());

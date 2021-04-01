@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 @Getter
 @Setter
@@ -20,11 +21,13 @@ public class Produto {
     @Column(name = "id")
     private Integer id ;
 
+    @NotEmpty(message = "{campo.descricao.obrigatorio}")
     @Column(name = "descricao")
     private String descricao;
 
+    @NotNull(message = "{campo.preco.obrigatorio}")
     @Column(name = "preco_unitario")
-    private BigDecimal preco;
+    private Double preco;
 
     @JsonIgnore
     @OneToMany(mappedBy = "produto")

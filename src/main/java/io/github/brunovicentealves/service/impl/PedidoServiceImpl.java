@@ -1,5 +1,6 @@
 package io.github.brunovicentealves.service.impl;
 
+import io.github.brunovicentealves.exception.PedidoNaoEncontradoException;
 import io.github.brunovicentealves.exception.RegraNegocioException;
 import io.github.brunovicentealves.model.domain.entity.Cliente;
 import io.github.brunovicentealves.model.domain.entity.Produto;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -47,16 +49,30 @@ public class PedidoServiceImpl  implements PedidoService {
                 .orElseThrow(() -> new RegraNegocioException("Código de cliente inválido."));
 
         Pedido pedido = new Pedido();
-        pedido.setTotal(dto.getTotal());
+
         pedido.setDataPedido(LocalDate.now());
         pedido.setCliente(cliente);
         pedido.setStatus(StatusPedido.REALIZADO);
 
         List<ItemPedido> itemsPedido = converterItems(pedido, dto.getItems());
+        pedido.setTotal(somar(itemsPedido));
         pedidoRespository.save(pedido);
         itemsPedidoRepository.saveAll(itemsPedido);
         pedido.setItens(itemsPedido);
         return pedido;
+    }
+
+    private Double somar(List<ItemPedido> itemsPedido) {
+        Double total = 0.0;
+        for(int n = 0; n < itemsPedido.size(); n++) {
+
+           total +=  calcularSomaTotalPedidos(itemsPedido.get(n).getQuantidade(),itemsPedido.get(n).getProduto().getPreco());
+            }
+        return total;
+        }
+
+    private Double calcularSomaTotalPedidos(Integer quantidade, Double preco) {
+        return  preco * quantidade ;
     }
 
     @Override
@@ -88,5 +104,29 @@ public class PedidoServiceImpl  implements PedidoService {
                 }).collect(Collectors.toList());
 
     }
+
+    @Transactional
+    public void AtualizarStatusPedido(Integer id, String novoStatus) {
+        pedidoRespository.findById(id).map(
+                pedido -> {
+                        pedido.setStatus(validarEnumStatusPedido(novoStatus , pedido));
+                        return pedidoRespository.save(pedido);
+
+                }
+        ).orElseThrow(()-> new PedidoNaoEncontradoException());
+
+    }
+
+    public StatusPedido validarEnumStatusPedido(String novoStatus , Pedido pedido){
+        if(novoStatus.equals("CANCELADO")){
+            System.out.println("esta chegando Aqui 1! -------.>");
+
+            return StatusPedido.CANCELADO;
+        }else{
+            throw new RegraNegocioException("Status de pedido errado !");
+        }
+    }
+
+
 }
 
